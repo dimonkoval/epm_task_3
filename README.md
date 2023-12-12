@@ -1,92 +1,109 @@
-# appliance-store-io-task
+# Appliance shop. IO
 
+The purpose of this exercise is to check your understanding of the Java input/output system.
 
-
-## Getting started
-
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
-```
-cd existing_repo
-git remote add origin https://autocode.git.epam.com/java-assessment/bronze-certificate/i_o-api/appliances/appliance-store-io-task.git
-git branch -M main
-git push -uf origin main
-```
-
-## Integrate with your tools
-
-- [ ] [Set up project integrations](https://autocode.git.epam.com/java-assessment/bronze-certificate/i_o-api/appliances/appliance-store-io-task/-/settings/integrations)
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
+Duration: **2** hours
 
 ## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+In this exercise, you will implement "Appliance shop" with support for storing and reading/writing entities from/to csv files. 
+The class diagram of the Domain model is shown in the figure below:
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+![img.png](img.png)
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+You are also given a description of the following interfaces and classes:  
+  * The `CsvStorage` interface provides two methods for reading/writing data from/to a csv file.  
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+  * The `Mapper` class provides static methods for converting text to an object of each entity class and vice versa.  
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+  * The `CsvStorageImpl` class implements the `CsvStorage` interface.  
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+First, proceed to the Domain model classes and implement their content.  
+Then, proceed to the `CsvStorageImpl` class and implement its content:  
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+* `public CsvStorageImpl()`  
+Initializes the configuration properties of a csv file with the default values  
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+* `public CsvStorageImpl(Map<String, String> props)`  
+Initializes the configuration properties of a csv file with the received values  
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+* `<T> List<T> read(InputStream source, Function<String[], T> mapper) throws IOException`  
+Returns the contents of the received file as a list of objects. The operation algorithm is as follows: It reads lines with data descriptions through the received source stream. Then, it splits each string into an array of `String` elements using valuesDelimiter. Then, it converts the resulting array into an object of the `T` type using the mapper parameter, a function that creates an object of the `T` type with field values taken from the given array.  
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+* `<T> void write(OutputStream dest, List<T> value, Function<T, String[]> mapper) throws IOException`  
+Writes the obtained list of objects to the specified dest stream. The operation algorithm is as follows: Each object of the `T` type is converted into an array of the String type using the mapper parameter. The elements of the array are then collected into a single string using valuesDelimiter to separate them. Then, the resulting string is written to a file. The mapper parameter is a function that converts an object of the `T` type into an array of the `String` type.  
 
-## License
-For open source projects, say how it is licensed.
+### Details
+* Domain model classes must have the following:
+  -	A default constructor
+  -	A constructor that takes values to initialize all fields as parameters
+  -	Getters and setters for all fields
+  -	The `equals()`, `hashCode()`, and `toString()` methods 
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+> _Note_: In the future, it is expected that objects of these classes will be transferred over a network or stored in a file or database.  
+
+* The string representation of an object of these classes must follow the following convention:
+    ``` 
+    Class_name{field1_name=field_value, field2_name=field_value, …}
+    ```
+     -	If a class inherits another class, it must include inherited fields before its own fields:  
+        ```
+         Class_name{parent_class_fields,   own_fields}
+        ```
+    -	String values must be surrounded by apostrophes. For example: text='value'  
+    -	If a field is a collection or an array, its value must be surrounded by square brackets.
+    -	Fields must be ordered as denoted in the UML class diagram.  
+* The configuration properties stored in the `CsvStorageImpl ` class are as follows:
+  -	`String encoding`  
+The encoding used when reading the csv files must be a valid charset. The default value is "UTF-8"
+  -	`String quoteCharacter`  
+The quote character is used for string data. The default value is '"'
+  -	`String valuesDelimiter`  
+The column delimiter character is used when reading a csv file. The default value is ","
+  -	`boolean headerLine`  
+If true, the first line is considered a header and must be ignored. The default value is "true"
+* Converting string data to object field values has the following features:
+  -	Empty string must be converted to `null` for referenced types or to the default value for primitive types.  
+  -	A quoted empty string "" must be converted to an empty string. It is guaranteed that quoted strings will not contain the _quoteCharacter_ character.  
+  -	A string representation of a value must be quoted if it contains the _valuesDelimiter_ character.
+  -	A string representation of a date must be in the format "yyyy-mm-dd". It is guaranteed that a date will not contain time-related values.
+* Converting object fields to strings has the following features:
+  -	A `null` must be converted to an empty string.
+  - A `0` must be converted to a `null`.
+  -	An empty string must be converted to a quoted empty string "".
+* The `write()` method of the `CsvStorageImp` class never writes column headers.
+
+## An example of a string representation
+
+
+Let class A have the following description:
+```
+class A {
+    private int p = 10;
+    protected int a = 1;
+    protected String s = "a string";
+    // ...
+}
+```
+The string representation of the object will be as follows:
+```
+A{p=10, a=1, s='a string'}
+```
+Let class B be the inheritor of class A and have the following description:
+```
+class B extends A {
+    private int b = 5;
+    private String t = "a text";
+    private char[] chars = {'a', 'b'};
+    // ...
+}
+```
+The string representation of the object will be as follows:
+```
+B{a=1, s='a string', b=5, t='a text', chars=[a, b]}
+```
+### Restrictions
+
+
+You may not use lambda expressions or streams.
+
