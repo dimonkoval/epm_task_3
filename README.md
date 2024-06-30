@@ -1,12 +1,12 @@
 # Appliance shop. IO
 
-The purpose of this exercise is to check your understanding of the Java input/output system.
+The purpose of this exercise is to check your understanding of the Java input/output API.
 
 Duration: **2** hours
 
 ## Description
 
-In this exercise, you will implement "Appliance shop" with support for storing and reading/writing entities from/to csv files. 
+In this exercise, you will implement "Appliance shop" with support for storing and reading/writing entities from/to csv files and storing date in those files. 
 The class diagram of the Domain model is shown in the figure below:
 
 ![img.png](img.png)
@@ -22,16 +22,16 @@ First, proceed to the Domain model classes and implement their content.
 Then, proceed to the `CsvStorageImpl` class and implement its content:  
 
 * `public CsvStorageImpl()`  
-Initializes the configuration properties of a csv file with the default values  
+The constructor that initializes the configuration properties of a csv file with the received values  
 
 * `public CsvStorageImpl(Map<String, String> props)`  
-Initializes the configuration properties of a csv file with the received values  
+The constructor that initializes the configuration properties of a csv file with the received values
 
 * `<T> List<T> read(InputStream source, Function<String[], T> mapper) throws IOException`  
-Returns the contents of the received file as a list of objects. The operation algorithm is as follows: It reads lines with data descriptions through the received source stream. Then, it splits each string into an array of `String` elements using valuesDelimiter. Then, it converts the resulting array into an object of the `T` type using the mapper parameter, a function that creates an object of the `T` type with field values taken from the given array.  
+Returns the contents of the received file as a list of objects. The operation algorithm is as follows: It reads lines with data descriptions through the received source stream. Then, it splits each string into an array of `String` elements using `valuesDelimiter`. Then, it converts the resulting array into an object of the `T` type using the mapper parameter, a function that creates an object of the `T` type with field values taken from the given array.  
 
 * `<T> void write(OutputStream dest, List<T> value, Function<T, String[]> mapper) throws IOException`  
-Writes the obtained list of objects to the specified dest stream. The operation algorithm is as follows: Each object of the `T` type is converted into an array of the String type using the mapper parameter. The elements of the array are then collected into a single string using valuesDelimiter to separate them. Then, the resulting string is written to a file. The mapper parameter is a function that converts an object of the `T` type into an array of the `String` type.  
+Writes the obtained list of objects to the specified dest stream. The operation algorithm is as follows: Each object of the `T` type is converted into an array of the String type using the mapper parameter. The elements of the array are then collected into a single string using `valuesDelimiter` to separate them. Then, the resulting string is written to a file. The mapper parameter is a function that converts an object of the `T` type into an array of the `String` type.  
 
 ### Details
 * Domain model classes must have the following:
