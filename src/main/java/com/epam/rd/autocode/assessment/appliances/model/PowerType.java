@@ -1,5 +1,5 @@
 package com.epam.rd.autocode.assessment.appliances.model;
 
 public enum PowerType {
-    //Your code
+    AC220, AC110, ACCUMULATOR
 }
